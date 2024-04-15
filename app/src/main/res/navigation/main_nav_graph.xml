@@ -10,6 +10,20 @@
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" >
 
+        <action
+            android:id="@+id/action_showDetail"
+            app:destination="@id/detailFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.example.asteroid.detail.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail">
+
+
+
     </fragment>
 
 
