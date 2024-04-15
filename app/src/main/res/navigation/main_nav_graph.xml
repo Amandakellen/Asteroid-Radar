@@ -22,7 +22,9 @@
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail">
 
-
+        <argument
+            android:name="selectedAsteroid"
+            app:argType="com.example.asteroid.Asteroid"/>
 
     </fragment>
 
