@@ -30,7 +30,7 @@ class AsteroidRepository(private val database: AsteroidsDatabase) {
             val apiService = AsteroidService.create()
 
             val neoDataWithDates = apiService.getNeoData(today, today)
-            val asteroidList = AsteroidService.getAsteroids(JSONObject(neoDataWithDates))
+            val asteroidList = AsteroidService.getAsteroids(neoDataWithDates)
 
             val databaseAsteroidList = asteroidList.toDatabaseAsteroidList()
 

@@ -18,13 +18,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val database =  getDatabase(application)
     private val repository = AsteroidRepository(database)
 
-    //var playlist : LiveData<List<Asteroid>>
+    var playlist : LiveData<List<Asteroid>>
 
     init {
         viewModelScope.launch {
             repository.refreshAsteroids()
         }
 
-        //playlist = repository.asteroids
+        playlist = repository.asteroids
     }
 }
