@@ -17,9 +17,16 @@ interface AsteroidsDao{
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg Asteroids: DatabaseAsteroid)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertImage(vararg image: DatabasePictureDay)
+
+    @Query("SELECT * FROM databasepictureday WHERE date = :date")
+    fun getImage(date: String): LiveData<DatabasePictureDay>
+
 }
 
-@Database(entities = [DatabaseAsteroid::class], version = 1)
+@Database(entities = [DatabaseAsteroid::class, DatabasePictureDay::class], version = 2)
 abstract class AsteroidsDatabase: RoomDatabase(){
     abstract val asteroidDao: AsteroidsDao
 }

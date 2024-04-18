@@ -3,11 +3,10 @@ package com.example.asteroid.api
 import com.example.asteroid.Asteroid
 import com.example.asteroid.Constants.API_KEY
 import com.example.asteroid.Constants.BASE_URL
-import com.example.asteroid.PictureOfDay
+import com.example.asteroid.data.PictureOfDay
 import com.example.asteroid.data.NeoResponse
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import org.json.JSONObject
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
