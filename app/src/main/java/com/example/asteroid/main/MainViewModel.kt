@@ -20,9 +20,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val database =  getDatabase(application)
     private val repository = AsteroidRepository(database)
 
-//    var playlist : LiveData<List<Asteroid>>
-//    var pictureOfDay : LiveData<PictureOfDay>
-    var urlImage: String? = null
+    var playlist : LiveData<List<Asteroid>>
+    var pictureOfDay : LiveData<PictureOfDay>
+    var urlImage: String?
 
     init {
         viewModelScope.launch {
@@ -31,10 +31,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         }
 
-//        playlist = repository.asteroids
-//        pictureOfDay = repository.pictureOfDay
+        playlist = repository.asteroids
+        pictureOfDay = repository.pictureOfDay
 
-//        urlImage = pictureOfDay.value?.url
+        urlImage = pictureOfDay.value?.url
     }
 
 }

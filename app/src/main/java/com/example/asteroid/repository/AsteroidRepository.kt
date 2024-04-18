@@ -1,6 +1,7 @@
 package com.example.asteroid.repository
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
@@ -23,13 +24,13 @@ import java.time.format.DateTimeFormatter
 class AsteroidRepository(private val database: AsteroidsDatabase) {
     private val today =
         LocalDateTime.now().format(DateTimeFormatter.ofPattern(API_QUERY_DATE_FORMAT))
-//    val asteroids: LiveData<List<Asteroid>> = database.asteroidDao.getAsteroids().map {
-//        it.asDomainModel()
-//    }
-//
-//    val pictureOfDay: LiveData<PictureOfDay> = database.asteroidDao.getImage(today).map {
-//        it.toPictureOfDay()
-//    }
+    val asteroids: LiveData<List<Asteroid>> = database.asteroidDao.getAsteroids().map {
+        it.asDomainModel()
+    }
+
+    val pictureOfDay: LiveData<PictureOfDay> = database.asteroidDao.getImage().map {
+        it.toPictureOfDay()
+    }
 
     suspend fun refreshAsteroids() {
         withContext(Dispatchers.IO) {
@@ -51,7 +52,11 @@ class AsteroidRepository(private val database: AsteroidsDatabase) {
 
             val imageDayData =  imageDay.toEntity()
 
-            database.asteroidDao.insertImage(imageDayData)
+            try{
+                database.asteroidDao.insertImage(imageDayData)
+            }catch (e: Exception){
+                Log.i("eroooou", e.toString())
+            }
         }
     }
 }

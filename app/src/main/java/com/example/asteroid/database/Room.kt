@@ -1,6 +1,7 @@
 package com.example.asteroid.database
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Database
@@ -19,14 +20,16 @@ interface AsteroidsDao{
     fun insertAll(vararg Asteroids: DatabaseAsteroid)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertImage(vararg image: DatabasePictureDay)
+    fun insertImage(vararg image: DatabasePictureDay){
+        Log.d("a", "Inserting image data into database")
+    }
 
-    @Query("SELECT * FROM databasepictureday WHERE date = :date")
-    fun getImage(date: String): LiveData<DatabasePictureDay>
+    @Query("SELECT * FROM databasepictureday")
+    fun getImage(): LiveData<DatabasePictureDay>
 
 }
 
-@Database(entities = [DatabaseAsteroid::class, DatabasePictureDay::class], version = 2)
+@Database(entities = [DatabaseAsteroid::class, DatabasePictureDay::class], version = 3)
 abstract class AsteroidsDatabase: RoomDatabase(){
     abstract val asteroidDao: AsteroidsDao
 }

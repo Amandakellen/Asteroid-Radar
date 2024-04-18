@@ -35,9 +35,10 @@ class MainFragment : Fragment() {
     }
 
     private fun setUpObsevables(){
-//        viewModel.pictureOfDay.observe(viewLifecycleOwner, Observer { pictureOfDay ->
-//            viewModel.urlImage = pictureOfDay.url
-//        })
+        viewModel.pictureOfDay.observe(viewLifecycleOwner, Observer { pictureOfDay ->
+            viewModel.urlImage = viewModel.urlImage
+            binding.executePendingBindings()
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
