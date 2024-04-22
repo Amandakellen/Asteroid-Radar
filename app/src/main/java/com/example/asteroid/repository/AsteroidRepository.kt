@@ -45,18 +45,21 @@ class AsteroidRepository(private val database: AsteroidsDatabase) {
         }
     }
 
-    suspend fun refreshImageDay(){
+    suspend fun refreshImageDay() {
         withContext(Dispatchers.IO) {
-            val apiService = AsteroidService.create()
-            val imageDay = apiService.getPictureOfDay()
+            try {
+                val apiService = AsteroidService.create()
+                val imageDay = apiService.getPictureOfDay()
 
-            val imageDayData =  imageDay.toEntity()
+                val imageDayData = imageDay.toEntity()
 
-            try{
                 database.asteroidDao.insertImage(imageDayData)
-            }catch (e: Exception){
-                Log.i("eroooou", e.toString())
+                Log.d("Debug", "Image data inserted successfully")
+            } catch (e: Exception) {
+                Log.e("Error", "Error inserting image data: ${e.message}")
+                // Trate a exceção conforme necessário
             }
         }
     }
+
 }

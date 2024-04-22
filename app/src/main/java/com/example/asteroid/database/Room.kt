@@ -20,10 +20,7 @@ interface AsteroidsDao{
     fun insertAll(vararg Asteroids: DatabaseAsteroid)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertImage(vararg image: DatabasePictureDay){
-        Log.d("a", "Inserting image data into database")
-    }
-
+    fun insertImage(vararg image: DatabasePictureDay)
     @Query("SELECT * FROM databasepictureday")
     fun getImage(): LiveData<DatabasePictureDay>
 
@@ -40,7 +37,7 @@ fun getDatabase(context: Context): AsteroidsDatabase{
     if(!::INSTANCE.isInitialized){
         INSTANCE = Room.databaseBuilder(context.applicationContext,
             AsteroidsDatabase::class.java,
-            "videos").build()
+            "nasa").build()
     }
     return INSTANCE
 }
