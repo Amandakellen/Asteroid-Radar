@@ -10,12 +10,12 @@ import java.util.Locale
 
 fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<Asteroid> {
     try {
-        // Acessa o array de objetos "near_earth_objects"
+        // Access the array of "near_earth_objects"
         val nearEarthObjectsArray = jsonResult.getJSONArray("near_earth_objects")
 
         val asteroidList = ArrayList<Asteroid>()
 
-        // Itera sobre cada asteroide no array
+        // Iterate over each asteroid in the array
         for (i in 0 until nearEarthObjectsArray.length()) {
             val asteroidJson = nearEarthObjectsArray.getJSONObject(i)
             val id = asteroidJson.getLong("id")
@@ -24,7 +24,7 @@ fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<Asteroid> {
             val estimatedDiameter = asteroidJson.getJSONObject("estimated_diameter")
                 .getJSONObject("kilometers").getDouble("estimated_diameter_max")
 
-            // Verifica se existem dados de aproximação
+            // Check if there are approach data
             if (asteroidJson.has("close_approach_data") && asteroidJson.getJSONArray("close_approach_data").length() > 0) {
                 val closeApproachData = asteroidJson
                     .getJSONArray("close_approach_data").getJSONObject(0)
@@ -34,15 +34,15 @@ fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<Asteroid> {
                 val distanceFromEarth = closeApproachData.getJSONObject("miss_distance")
                     .getDouble("astronomical")
 
-                // Indica se o asteroide é potencialmente perigoso
+                // Indicate if the asteroid is potentially hazardous
                 val isPotentiallyHazardous = asteroidJson
                     .getBoolean("is_potentially_hazardous_asteroid")
 
-                // Cria o objeto Asteroid e adiciona à lista
+                // Create the Asteroid object and add it to the list
                 val asteroid = Asteroid(
                     id,
                     codename,
-                    closeApproachData.getString("close_approach_date"), // Data da aproximação
+                    closeApproachData.getString("close_approach_date"), // Date of the approach
                     absoluteMagnitude,
                     estimatedDiameter,
                     relativeVelocity,
@@ -56,7 +56,7 @@ fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<Asteroid> {
         return asteroidList
 
     } catch (e: Exception) {
-        Log.e("AsteroidParsing", "Erro ao fazer parsing do JSON", e)
+        Log.e("AsteroidParsing", "Error parsing JSON", e)
         throw e
     }
 }
