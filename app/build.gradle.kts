@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("kotlin-parcelize")
     id("kotlin-kapt")
-    id("androidx.navigation.safeargs.kotlin") version "2.5.0"
+    id("androidx.navigation.safeargs.kotlin") version "2.8.4"
 }
 
 android {
@@ -44,7 +44,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -53,7 +52,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
 
     // ViewModel and LiveData
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
@@ -92,5 +90,16 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    // Koin
+    // Koin para Android (3.4.0 ou superior)
+    implementation("io.insert-koin:koin-android:3.4.2")
 
+    // Retrofit para comunicação com a API
+    implementation(libs.retrofit.v290)
+
+    // Gson converter para Retrofit
+    implementation(libs.converter.gson)
+
+    // Gson para manipulação de JSON
+    implementation("com.google.code.gson:gson:2.10.1")
 }
