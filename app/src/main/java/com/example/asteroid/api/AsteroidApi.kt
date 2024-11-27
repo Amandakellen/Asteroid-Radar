@@ -1,12 +1,10 @@
 package com.example.asteroid.api
 
+import com.example.asteroid.Constants.API_KEY
 import okhttp3.ResponseBody
-import org.json.JSONObject
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
-
-const val API_KEY = "nHgvcqUO36pOHBCBMOEumAbVnDfycNYNJZddQkxx"
 
 interface AsteroidApi {
 

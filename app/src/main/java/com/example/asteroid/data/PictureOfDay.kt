@@ -1,4 +1,4 @@
-package com.example.asteroid
+package com.example.asteroid.data
 
 import com.squareup.moshi.Json
 

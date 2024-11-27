@@ -4,7 +4,7 @@
     <data>
         <variable
             name="asteroid"
-            type="com.example.asteroid.Asteroid" />
+            type="com.example.asteroid.data.Asteroid" />
     </data>
 
     <androidx.cardview.widget.CardView

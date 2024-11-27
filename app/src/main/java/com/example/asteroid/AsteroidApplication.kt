@@ -10,7 +10,6 @@ class AsteroidApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        // Inicializa o Koin com o appModule
         startKoin {
             androidContext(this@AsteroidApplication)
             modules(appModule)

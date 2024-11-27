@@ -12,8 +12,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import org.koin.androidx.viewmodel.dsl.viewModel
 
 val appModule = module {
-
-    // Definir o Retrofit
     single {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -22,17 +20,15 @@ val appModule = module {
             .create(AsteroidApi::class.java)
     }
 
-    // Definir o repositório
     single { AsteroidRepository(get(),get()) }
 
-    // Definir o ViewModel
     viewModel { MainViewModel(get()) }
 
     single {
         Room.databaseBuilder(
-            get(), // contexto
-            AsteroidDatabase::class.java, // classe do banco
-            "asteroids_database" // nome do banco
+            get(),
+            AsteroidDatabase::class.java,
+            "asteroids_database"
         ).build()
     }
 

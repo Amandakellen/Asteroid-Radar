@@ -5,7 +5,7 @@ package com.example.asteroid.main
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.asteroid.Asteroid
+import com.example.asteroid.data.Asteroid
 import com.example.asteroid.databinding.AsteroidItemBinding
 
 

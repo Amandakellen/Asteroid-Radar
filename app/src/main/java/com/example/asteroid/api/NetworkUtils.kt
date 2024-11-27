@@ -1,7 +1,7 @@
 package com.example.asteroid.api
 
 import android.util.Log
-import com.example.asteroid.Asteroid
+import com.example.asteroid.data.Asteroid
 import com.example.asteroid.Constants
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -39,7 +39,6 @@ fun parseAsteroidsJsonResult(jsonResult: JSONObject, shouldFilterDates: Boolean 
                     parsedDate1.compareTo(parsedDate2)
                 }
 
-                // Verifica se deve filtrar por datas
                 if (shouldFilterDates) {
                     val filteredDates = closeApproachDateList.filter { it in nextSevenDaysFormattedDates }
                     if (filteredDates.isNotEmpty()) {
@@ -55,7 +54,7 @@ fun parseAsteroidsJsonResult(jsonResult: JSONObject, shouldFilterDates: Boolean 
                             Asteroid(
                                 id,
                                 codename,
-                                filteredDates, // Apenas as datas filtradas
+                                filteredDates,
                                 absoluteMagnitude,
                                 estimatedDiameter,
                                 relativeVelocity,
@@ -76,7 +75,7 @@ fun parseAsteroidsJsonResult(jsonResult: JSONObject, shouldFilterDates: Boolean 
                         Asteroid(
                             id,
                             codename,
-                            closeApproachDateList, // Todas as datas ordenadas
+                            closeApproachDateList,
                             absoluteMagnitude,
                             estimatedDiameter,
                             relativeVelocity,

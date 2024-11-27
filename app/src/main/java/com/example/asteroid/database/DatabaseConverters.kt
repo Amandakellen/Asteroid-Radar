@@ -1,7 +1,7 @@
 package com.example.asteroid.database
 
 import androidx.room.TypeConverter
-import com.example.asteroid.Asteroid
+import com.example.asteroid.data.Asteroid
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
