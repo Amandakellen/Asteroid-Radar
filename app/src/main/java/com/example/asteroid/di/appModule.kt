@@ -1,5 +1,6 @@
 package com.example.asteroid.di
 
+import com.example.asteroid.Constants.BASE_URL
 import com.example.asteroid.api.AsteroidApi
 import com.example.asteroid.repository.AsteroidRepository
 import com.example.asteroid.main.MainViewModel
@@ -13,7 +14,7 @@ val appModule = module {
     // Definir o Retrofit
     single {
         Retrofit.Builder()
-            .baseUrl("https://api.nasa.gov/")
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(AsteroidApi::class.java)

@@ -1,5 +1,6 @@
 package com.example.asteroid.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -28,6 +29,7 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository) : ViewMo
         viewModelScope.launch {
             try {
                 val asteroidList = asteroidRepository.getAsteroidsFromApi()
+                Log.i("viewModel", asteroidList.toString())
                 _asteroids.value = asteroidList
             } catch (e: Exception) {
                 // Tratar erros de rede
