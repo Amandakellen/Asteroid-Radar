@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.asteroid.data.Asteroid
 import com.example.asteroid.R
@@ -46,6 +47,8 @@ class MainFragment : Fragment() {
     }
 
     private fun onAsteroidClicked(asteroid: Asteroid) {
+        val action = MainFragmentDirections.actionShowDetail(asteroid)
+        findNavController().navigate(action)
     }
 
     @Deprecated("Deprecated in Java")

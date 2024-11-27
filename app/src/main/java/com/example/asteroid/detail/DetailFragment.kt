@@ -7,11 +7,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.asteroid.R
 import androidx.appcompat.app.AlertDialog
+import com.example.asteroid.data.AsteroidImage
 import com.example.asteroid.databinding.FragmentDetailBinding
+import com.squareup.picasso.Picasso
 
 class DetailFragment : Fragment() {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val binding = FragmentDetailBinding.inflate(inflater)
         binding.lifecycleOwner = this
 
@@ -19,11 +23,26 @@ class DetailFragment : Fragment() {
 
         binding.asteroid = asteroid
 
+        val imageResource = getImage(asteroid.isPotentiallyHazardous)
+        Picasso.get()
+            .load(imageResource)
+            .into(binding.activityMainImageOfTheDay)
+//        binding.activityMainImageOfTheDay.setImageResource(imageResource)
+
         binding.helpButton.setOnClickListener {
             displayAstronomicalUnitExplanationDialog()
         }
 
         return binding.root
+    }
+
+    private fun getImage(isPotentiallyHazardous: Boolean): Int{
+       return  if(isPotentiallyHazardous){
+           AsteroidImage.HAZARDOUS.imageResId
+        }else{
+           AsteroidImage.SAFE.imageResId
+       }
+
     }
 
     private fun displayAstronomicalUnitExplanationDialog() {
