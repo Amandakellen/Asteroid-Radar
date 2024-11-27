@@ -37,6 +37,10 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository) : ViewMo
         }
     }
 
+    fun getLastAsteroid(): Asteroid? {
+        return _asteroids.value?.lastOrNull()
+    }
+
     private fun fetchAsteroids() {
         viewModelScope.launch {
             try {
