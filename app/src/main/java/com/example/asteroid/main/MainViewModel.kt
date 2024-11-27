@@ -21,19 +21,41 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository) : ViewMo
     val pictureOfDayUrl: LiveData<String> get() = _pictureOfDayUrl
 
     init {
-        fetchAsteroids()
+        // Observando a lista de asteroides no banco de dados
+        getAsteroidsFromCache()
+    }
+
+    private fun getAsteroidsFromCache() {
+        _isLoading.value = true
+        asteroidRepository.getAllAsteroidsFromDatabase().observeForever { asteroidList ->
+            // Verifique se o cache está vazio
+            if (asteroidList.isNullOrEmpty()) {
+                // Caso não haja dados no cache, busque da API
+                fetchAsteroids()
+            } else {
+                // Caso contrário, apenas atribua os dados do cache
+                _asteroids.value = asteroidList
+                _isLoading.value = false
+                Log.i("viewModel", "Cache carregado com sucesso")
+            }
+        }
     }
 
     private fun fetchAsteroids() {
-        _isLoading.value = true
         viewModelScope.launch {
             try {
-                val asteroidList = asteroidRepository.getAsteroidsFromApi()
-                Log.i("viewModel", asteroidList.toString())
-                _asteroids.value = asteroidList
+                // Chama a API para buscar os asteroides
+                asteroidRepository.getAsteroidsFromApi()
+
+                // Após a chamada à API, recarregue os dados do banco de dados
+                _asteroids.value = asteroidRepository.getAllAsteroidsFromDatabase().value
+
+                Log.i("viewModel", "Dados carregados da API e armazenados no banco de dados")
             } catch (e: Exception) {
-                // Tratar erros de rede
+                // Tratar erros de rede ou outros erros
+                Log.e("viewModel", "Erro ao carregar asteroides da API", e)
             } finally {
+                // Atualiza o estado de carregamento
                 _isLoading.value = false
             }
         }

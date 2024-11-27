@@ -1,7 +1,9 @@
 package com.example.asteroid.di
 
+import androidx.room.Room
 import com.example.asteroid.Constants.BASE_URL
 import com.example.asteroid.api.AsteroidApi
+import com.example.asteroid.database.AsteroidDatabase
 import com.example.asteroid.repository.AsteroidRepository
 import com.example.asteroid.main.MainViewModel
 import org.koin.dsl.module
@@ -21,8 +23,19 @@ val appModule = module {
     }
 
     // Definir o repositório
-    single { AsteroidRepository(get()) }
+    single { AsteroidRepository(get(),get()) }
 
     // Definir o ViewModel
     viewModel { MainViewModel(get()) }
+
+    single {
+        Room.databaseBuilder(
+            get(), // contexto
+            AsteroidDatabase::class.java, // classe do banco
+            "asteroids_database" // nome do banco
+        ).build()
+    }
+
+    single { get<AsteroidDatabase>().asteroidDao}
+
 }
