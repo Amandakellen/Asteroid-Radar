@@ -1,21 +1,18 @@
-package com.example.asteroid
 
-import android.annotation.SuppressLint
+
+package com.example.asteroid.main
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.asteroid.databinding.AsteroidItemBinding
 import com.example.asteroid.Asteroid
+import com.example.asteroid.databinding.AsteroidItemBinding
 
-class AsteroidAdapter : RecyclerView.Adapter<AsteroidAdapter.AsteroidViewHolder>() {
 
-    private var asteroidList: List<Asteroid> = emptyList()
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun submitList(list: List<Asteroid>) {
-        asteroidList = list
-        notifyDataSetChanged()
-    }
+class AsteroidAdapter(
+    private val asteroidList: List<Asteroid>,
+    private val onItemClick: (Asteroid) -> Unit
+) : RecyclerView.Adapter<AsteroidAdapter.AsteroidViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AsteroidViewHolder {
         val binding = AsteroidItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -25,12 +22,12 @@ class AsteroidAdapter : RecyclerView.Adapter<AsteroidAdapter.AsteroidViewHolder>
     override fun onBindViewHolder(holder: AsteroidViewHolder, position: Int) {
         val asteroid = asteroidList[position]
         holder.bind(asteroid)
+        holder.itemView.setOnClickListener { onItemClick(asteroid) }
     }
 
-    override fun getItemCount() = asteroidList.size
+    override fun getItemCount(): Int = asteroidList.size
 
     class AsteroidViewHolder(private val binding: AsteroidItemBinding) : RecyclerView.ViewHolder(binding.root) {
-
         fun bind(asteroid: Asteroid) {
             binding.asteroid = asteroid
             binding.executePendingBindings()
