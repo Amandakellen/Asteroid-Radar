@@ -10,10 +10,10 @@ import java.util.Locale
 
 fun parseAsteroidsJsonResult(jsonResult: JSONObject, shouldFilterDates: Boolean = false): ArrayList<Asteroid> {
     try {
-        // Access the array of "near_earth_objects"
         val nearEarthObjectsArray = jsonResult.getJSONArray("near_earth_objects")
         val nextSevenDaysFormattedDates = getNextSevenDaysFormattedDates()
         val asteroidList = ArrayList<Asteroid>()
+        val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
         for (i in 0 until nearEarthObjectsArray.length()) {
             val asteroidJson = nearEarthObjectsArray.getJSONObject(i)
@@ -23,71 +23,78 @@ fun parseAsteroidsJsonResult(jsonResult: JSONObject, shouldFilterDates: Boolean 
             val estimatedDiameter = asteroidJson.getJSONObject("estimated_diameter")
                 .getJSONObject("kilometers").getDouble("estimated_diameter_max")
 
-            // Check if there are approach data
             if (asteroidJson.has("close_approach_data") && asteroidJson.getJSONArray("close_approach_data").length() > 0) {
-                val closeApproachData = asteroidJson.getJSONArray("close_approach_data").getJSONObject(0)
-                val closeApproachDate = closeApproachData.getString("close_approach_date")
+                val closeApproachData = asteroidJson.getJSONArray("close_approach_data")
+                val closeApproachDateList = mutableListOf<String>() // Mover a lista para o escopo correto
 
-                // If shouldFilterDates is true, apply date filtering
+                for (data in 0 until closeApproachData.length()) {
+                    val closeApproachDataItem = closeApproachData.getJSONObject(data)
+                    val closeApproachDateItem = closeApproachDataItem.getString("close_approach_date")
+                    closeApproachDateList.add(closeApproachDateItem)
+                }
+
+                closeApproachDateList.sortWith { date1, date2 ->
+                    val parsedDate1 = dateFormatter.parse(date1)
+                    val parsedDate2 = dateFormatter.parse(date2)
+                    parsedDate1.compareTo(parsedDate2)
+                }
+
+                // Verifica se deve filtrar por datas
                 if (shouldFilterDates) {
-                    for (formattedDate in nextSevenDaysFormattedDates) {
-                        if (closeApproachDate == formattedDate) {
-                            val relativeVelocity = closeApproachData.getJSONObject("relative_velocity")
-                                .getDouble("kilometers_per_second")
-                            val distanceFromEarth = closeApproachData.getJSONObject("miss_distance")
-                                .getDouble("astronomical")
+                    val filteredDates = closeApproachDateList.filter { it in nextSevenDaysFormattedDates }
+                    if (filteredDates.isNotEmpty()) {
+                        val firstFilteredDate = filteredDates.first()
+                        val relativeVelocity = closeApproachData.getJSONObject(0)
+                            .getJSONObject("relative_velocity").getDouble("kilometers_per_second")
+                        val distanceFromEarth = closeApproachData.getJSONObject(0)
+                            .getJSONObject("miss_distance").getDouble("astronomical")
+                        val isPotentiallyHazardous = asteroidJson
+                            .getBoolean("is_potentially_hazardous_asteroid")
 
-                            val isPotentiallyHazardous = asteroidJson
-                                .getBoolean("is_potentially_hazardous_asteroid")
-
-                            // Create the Asteroid object and add it to the list
-                            val asteroid = Asteroid(
+                        asteroidList.add(
+                            Asteroid(
                                 id,
                                 codename,
-                                closeApproachDate, // Date of the approach
+                                filteredDates, // Apenas as datas filtradas
                                 absoluteMagnitude,
                                 estimatedDiameter,
                                 relativeVelocity,
                                 distanceFromEarth,
                                 isPotentiallyHazardous
                             )
-                            asteroidList.add(asteroid)
-                            break // Exit the loop if a match is found
-                        }
+                        )
                     }
                 } else {
-                    // If filtering is disabled, add the asteroid regardless of date
-                    val relativeVelocity = closeApproachData.getJSONObject("relative_velocity")
-                        .getDouble("kilometers_per_second")
-                    val distanceFromEarth = closeApproachData.getJSONObject("miss_distance")
-                        .getDouble("astronomical")
-
+                    val relativeVelocity = closeApproachData.getJSONObject(0)
+                        .getJSONObject("relative_velocity").getDouble("kilometers_per_second")
+                    val distanceFromEarth = closeApproachData.getJSONObject(0)
+                        .getJSONObject("miss_distance").getDouble("astronomical")
                     val isPotentiallyHazardous = asteroidJson
                         .getBoolean("is_potentially_hazardous_asteroid")
 
-                    // Create the Asteroid object and add it to the list
-                    val asteroid = Asteroid(
-                        id,
-                        codename,
-                        closeApproachDate, // Date of the approach
-                        absoluteMagnitude,
-                        estimatedDiameter,
-                        relativeVelocity,
-                        distanceFromEarth,
-                        isPotentiallyHazardous
+                    asteroidList.add(
+                        Asteroid(
+                            id,
+                            codename,
+                            closeApproachDateList, // Todas as datas ordenadas
+                            absoluteMagnitude,
+                            estimatedDiameter,
+                            relativeVelocity,
+                            distanceFromEarth,
+                            isPotentiallyHazardous
+                        )
                     )
-                    asteroidList.add(asteroid)
                 }
             }
         }
 
         return asteroidList
-
     } catch (e: Exception) {
         Log.e("AsteroidParsing", "Error parsing JSON", e)
         throw e
     }
 }
+
 
 
 fun getNextSevenDaysFormattedDates(): ArrayList<String> {
