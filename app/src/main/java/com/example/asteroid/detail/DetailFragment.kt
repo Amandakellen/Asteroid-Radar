@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import com.example.asteroid.R
 import androidx.appcompat.app.AlertDialog
@@ -24,10 +25,10 @@ class DetailFragment : Fragment() {
         binding.asteroid = asteroid
 
         val imageResource = getImage(asteroid.isPotentiallyHazardous)
+        addDescription(asteroid.isPotentiallyHazardous, binding.activityMainImageOfTheDay)
         Picasso.get()
             .load(imageResource)
             .into(binding.activityMainImageOfTheDay)
-//        binding.activityMainImageOfTheDay.setImageResource(imageResource)
 
         binding.helpButton.setOnClickListener {
             displayAstronomicalUnitExplanationDialog()
@@ -36,12 +37,20 @@ class DetailFragment : Fragment() {
         return binding.root
     }
 
-    private fun getImage(isPotentiallyHazardous: Boolean): Int{
-       return  if(isPotentiallyHazardous){
-           AsteroidImage.HAZARDOUS.imageResId
+    private fun addDescription(isPotentiallyHazardous: Boolean, imageView: ImageView) {
+        imageView.contentDescription =  if (isPotentiallyHazardous) {
+                "Image of an angry asteroid because this asteroid is Potentially Hazardous"
         }else{
-           AsteroidImage.SAFE.imageResId
-       }
+            "Image of an happy asteroid because this asteroid is not Potentially Hazardous"
+        }
+    }
+
+    private fun getImage(isPotentiallyHazardous: Boolean): Int {
+        return if (isPotentiallyHazardous) {
+            AsteroidImage.HAZARDOUS.imageResId
+        } else {
+            AsteroidImage.SAFE.imageResId
+        }
 
     }
 
