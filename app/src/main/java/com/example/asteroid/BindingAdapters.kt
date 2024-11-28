@@ -5,6 +5,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.example.asteroid.data.Asteroid
+import java.util.Calendar
 
 @BindingAdapter("statusIcon")
 fun bindAsteroidStatusImage(imageView: ImageView, isHazardous: Boolean) {
@@ -46,17 +47,23 @@ fun setIsLoading(view: View, isLoading: Boolean?) {
     view.visibility = if (isLoading == true) View.VISIBLE else View.GONE
 }
 
-@BindingAdapter("lastItem")
-fun setLastItem(imageView: ImageView, list: List<Asteroid>?) {
-    // Verifica se a lista não é nula e tem itens, e então pega o último item
-    list?.lastOrNull()?.let {
-        // Aqui você pode configurar a lógica para o que deseja exibir com base no último item
-        // Por exemplo, vamos setar uma imagem condicionalmente com base no item
-        val asteroidImage = if (it.isPotentiallyHazardous) {
-            R.drawable.asteroid_hazardous
-        } else {
-            R.drawable.asteroid_safe
-        }
-        imageView.setImageResource(asteroidImage)
+@BindingAdapter("datesContainingCurrentYearOrLast")
+fun bindDatesContainingCurrentYearOrLast(textView: TextView, dateList: List<String>?) {
+    val currentYear = Calendar.getInstance().get(Calendar.YEAR).toString()
+    val filteredDates = dateList?.filter { it.contains(currentYear) }
+
+    val finalDates = if (filteredDates.isNullOrEmpty()) {
+        dateList?.lastOrNull()?.let { listOf(it) }
+    } else {
+        filteredDates
+    }
+    textView.text = finalDates?.joinToString(", ") ?: "Nenhuma data disponível"
+}
+@BindingAdapter("lastCloseApproachDate")
+fun bindLastCloseApproachDate(textView: TextView, dateList: List<String>?) {
+    dateList?.lastOrNull()?.let { lastDate ->
+        textView.text = lastDate
+    } ?: run {
+        textView.text = ""
     }
 }
