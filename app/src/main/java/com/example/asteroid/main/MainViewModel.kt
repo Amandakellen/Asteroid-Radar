@@ -22,6 +22,7 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository) : ViewMo
 
     init {
         getAsteroidsFromCache()
+        getImageDay()
     }
 
     private fun getAsteroidsFromCache() {
@@ -37,10 +38,6 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository) : ViewMo
         }
     }
 
-    fun getLastAsteroid(): Asteroid? {
-        return _asteroids.value?.lastOrNull()
-    }
-
     private fun fetchAsteroids() {
         viewModelScope.launch {
             try {
@@ -52,6 +49,22 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository) : ViewMo
             } finally {
                 _isLoading.value = false
             }
+        }
+    }
+
+    private fun getImageDay(){
+        _isLoading.value = true
+        viewModelScope.launch {
+            try{
+                val picture =  asteroidRepository.getImageDay()
+                _pictureOfDayUrl.value = picture?.url
+                Log.i("viewModel", "Imagem carregada com sucesso")
+            }catch (e: Exception) {
+                Log.e("viewModel", "Erro ao carregar imagem da API", e)
+            }finally {
+                _isLoading.value = false
+            }
+
         }
     }
 }

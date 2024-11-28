@@ -6,6 +6,7 @@ import androidx.lifecycle.map
 import com.example.asteroid.data.Asteroid
 import com.example.asteroid.api.AsteroidApi
 import com.example.asteroid.api.parseAsteroidsJsonResult
+import com.example.asteroid.data.PictureOfDay
 import com.example.asteroid.database.AsteroidDao
 import com.example.asteroid.database.toAsteroid
 import com.example.asteroid.database.toDatabaseAsteroid
@@ -57,5 +58,21 @@ class AsteroidRepository(private val asteroidApi: AsteroidApi, private val aster
 
     suspend fun deleteOldAsteroids(today: String) {
         asteroidDao.deleteOldAsteroids(today)
+    }
+
+    suspend fun getImageDay(): PictureOfDay? {
+        try {
+            val response = asteroidApi.getImageDay()  // Chama a API para obter a imagem do dia
+            if (response.isSuccessful) {
+                val pictureOfDay = response.body()
+                Log.d("AsteroidRepository", "Imagem do Dia: $pictureOfDay")
+                return pictureOfDay
+            } else {
+                throw IOException("Erro na resposta da API: ${response.code()} - ${response.message()}")
+            }
+        } catch (e: Exception) {
+            Log.i("error", e.cause.toString())
+            return null
+        }
     }
 }
