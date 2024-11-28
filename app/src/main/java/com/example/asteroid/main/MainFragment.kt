@@ -43,7 +43,11 @@ class MainFragment : Fragment() {
             binding.asteroidRecycler.adapter = asteroidAdapter
         })
 
-        viewModel.pictureOfDayUrl.value?.let { loadImage(it, binding.activityMainImageOfTheDay) }
+        viewModel.pictureOfDayUrl.observe(viewLifecycleOwner, Observer { url ->
+            if (url != null) {
+                loadImage(url, binding.activityMainImageOfTheDay)
+            }
+        })
 
         setHasOptionsMenu(true)
 

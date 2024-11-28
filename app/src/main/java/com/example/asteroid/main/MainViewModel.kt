@@ -58,9 +58,9 @@ class MainViewModel(private val asteroidRepository: AsteroidRepository) : ViewMo
             try{
                 val picture =  asteroidRepository.getImageDay()
                 _pictureOfDayUrl.value = picture?.url
-                Log.i("viewModel", "Imagem carregada com sucesso")
+                Log.i("imageViewModel", "Imagem carregada com sucesso ${_pictureOfDayUrl.value}")
             }catch (e: Exception) {
-                Log.e("viewModel", "Erro ao carregar imagem da API", e)
+                Log.e("imageViewModel", "Erro ao carregar imagem da API", e)
             }finally {
                 _isLoading.value = false
             }
