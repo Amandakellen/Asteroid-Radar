@@ -4,6 +4,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import com.bumptech.glide.Glide
 import com.example.asteroid.data.Asteroid
 import java.util.Calendar
 
@@ -66,4 +67,14 @@ fun bindLastCloseApproachDate(textView: TextView, dateList: List<String>?) {
     } ?: run {
         textView.text = ""
     }
+}
+
+@BindingAdapter("imageUrl", "contentDescription")
+fun bindImageWithDescription(imageView: ImageView, imageUrl: String?, description: String?) {
+    imageUrl?.let {
+        Glide.with(imageView.context)
+            .load(it)
+            .into(imageView)
+    }
+    imageView.contentDescription = description ?: imageView.context.getString(R.string.default_description)
 }

@@ -1,21 +1,30 @@
 package com.example.asteroid.repository
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.example.asteroid.data.Asteroid
 import com.example.asteroid.api.AsteroidApi
 import com.example.asteroid.api.parseAsteroidsJsonResult
+import com.example.asteroid.data.AsteroidFilter
 import com.example.asteroid.data.PictureOfDay
 import com.example.asteroid.database.AsteroidDao
+import com.example.asteroid.database.DatabaseAsteroid
 import com.example.asteroid.database.toAsteroid
 import com.example.asteroid.database.toDatabaseAsteroid
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.IOException
 
-class AsteroidRepository(private val asteroidApi: AsteroidApi, private val asteroidDao: AsteroidDao,) {
+class AsteroidRepository(
+    private val asteroidApi: AsteroidApi,
+    private val asteroidDao: AsteroidDao,
+) {
 
-    suspend fun getAsteroidsFromApi(){
+    suspend fun getAsteroidsFromApi() {
         try {
             val response = asteroidApi.getAsteroids()
 
@@ -73,6 +82,17 @@ class AsteroidRepository(private val asteroidApi: AsteroidApi, private val aster
         } catch (e: Exception) {
             Log.i("error", e.cause.toString())
             return null
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getFilteredAsteroids(filter: AsteroidFilter): LiveData<List<Asteroid>> {
+        return when (filter) {
+            AsteroidFilter.TODAY -> asteroidDao.getTodayAsteroids()
+            AsteroidFilter.WEEK -> asteroidDao.getWeekAsteroids()
+            AsteroidFilter.ALL -> asteroidDao.getAllAsteroids().map { databaseAsteroids ->
+                databaseAsteroids.map { it.toAsteroid() }
+            }
         }
     }
 }

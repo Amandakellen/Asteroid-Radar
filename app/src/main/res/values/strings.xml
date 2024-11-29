@@ -23,6 +23,7 @@
     <string name="diameter">Diameter: </string>
     <string name="velocity">Velocity: </string>
     <string name="distance">Distance: </string>
+    <string name="default_description">Nasa Image today</string>
 
 
 </resources>

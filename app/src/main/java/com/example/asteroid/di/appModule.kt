@@ -6,6 +6,7 @@ import com.example.asteroid.api.AsteroidApi
 import com.example.asteroid.database.AsteroidDatabase
 import com.example.asteroid.repository.AsteroidRepository
 import com.example.asteroid.main.MainViewModel
+import com.example.asteroid.workers.AsteroidDownloadWorker
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -33,5 +34,7 @@ val appModule = module {
     }
 
     single { get<AsteroidDatabase>().asteroidDao}
+
+    single { AsteroidDownloadWorker(get(), get(), get()) }
 
 }
