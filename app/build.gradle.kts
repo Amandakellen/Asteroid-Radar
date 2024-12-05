@@ -41,9 +41,11 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-}
+}9
 
 dependencies {
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.21")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.21")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -71,7 +73,6 @@ dependencies {
 
     // Room database
     implementation(libs.androidx.room.runtime)
-    kapt(libs.androidx.room.compiler)
     // Kotlin Extensions and Coroutines support for Room
     implementation(libs.androidx.room.ktx)
 
