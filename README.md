@@ -1,6 +1,3 @@
- Aqui está o **README** formatado em **Markdown** para o projeto **Asteroid-Radar** com base nos critérios e funcionalidades exigidos pela Udacity.
-
----
 
 # 🌌 **Asteroid Radar**
 
